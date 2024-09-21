@@ -1,15 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Sign Up</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-</html>
-
 <?php
-
-
 class SignUpForm {
+    private $conn;
+
+    public function __construct($dbConn) {
+        $this->conn = $dbConn;
+    }
+
     public function renderForm() {
         echo '
         <div class="container mt-5">
@@ -39,8 +35,8 @@ class SignUpForm {
                     <label for="genderId">Gender:</label>
                     <select class="form-control" id="genderId" name="genderId" required>
                         <option value="" disabled selected>Select your gender</option>
-                        <option value="0">Female</option>
-                        <option value="1">Male</option>
+                        <option value="1">Female</option>
+                        <option value="2">Male</option>
                     </select>
                 </div>
 
@@ -48,9 +44,8 @@ class SignUpForm {
                     <label for="roleId">Role:</label>
                     <select class="form-control" id="roleId" name="roleId" required>
                         <option value="" disabled selected>Select your role</option>
-                        <option value="0">Client</option>
-                        <option value="1">Admin</option>
-                        
+                        <option value="1">Client</option>
+                        <option value="2">Admin</option>
                     </select>
                 </div>
 
@@ -58,5 +53,32 @@ class SignUpForm {
             </form>
         </div>';
     }
+
+    public function handleFormSubmission() {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            $fullname = $_POST['fullname'];
+            $email = $_POST['email'];
+            $username = $_POST['username'];
+            $password = password_hash($_POST['password'], PASSWORD_DEFAULT); 
+            $genderId = $_POST['genderId'];
+            $roleId = $_POST['roleId'];
+
+            // Check if the email already exists
+        $stmt = $this->conn->prepare("SELECT COUNT(*) FROM users WHERE email = ?");
+        $stmt->execute([$email]);
+        $emailExists = $stmt->fetchColumn();
+
+        if ($emailExists) {
+            echo "Error: Email already exists. Please use a different email.";
+        } else {
+
+            // Insert into the database
+            $stmt = $this->conn->prepare("INSERT INTO users (fullname, email, username, password, gender_id, role_id) VALUES (?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$fullname, $email, $username, $password, $genderId, $roleId]);
+
+            echo "User registered successfully!";
+        }
+    }
+}
 }
 ?>
