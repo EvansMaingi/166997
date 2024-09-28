@@ -53,12 +53,12 @@ class DisplayUsers {
     }
 }
 
-
 require "dbConnection.php";  
-
 
 $dbConn = new PDO('mysql:host=localhost;dbname=your_database_name', 'your_username', 'your_password');
 $displayUsers = new DisplayUsers($dbConn);
 $displayUsers->displayUsersTable();
 
 ?>
+
+
