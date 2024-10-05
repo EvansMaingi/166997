@@ -1,5 +1,4 @@
 <?php
-
 class DisplayUsers {
     private $conn;
 
@@ -8,14 +7,10 @@ class DisplayUsers {
     }
 
     public function displayUsersTable() {
-        
         $stmt = $this->conn->prepare("SELECT fullname, email, username, gender_id, role_id FROM users");
         $stmt->execute();
-
-        
         $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-        
         if ($users) {
             echo '
             <div class="container mt-5">
@@ -31,7 +26,6 @@ class DisplayUsers {
                         </tr>
                     </thead>
                     <tbody>';
-
             
             foreach ($users as $user) {
                 echo '<tr>';
@@ -48,28 +42,8 @@ class DisplayUsers {
                 </table>
             </div>';
         } else {
-            
             echo '<div class="container mt-5"><p>No users found in the database.</p></div>';
         }
     }
 }
-
-require "DbConnection.php";  
-
-$dbConn = new PDO('mysql:host=localhost;dbname=your_database_name', 'your_username', 'your_password');
-$displayUsers = new DisplayUsers($dbConn);
-$displayUsers->displayUsersTable();
-
 ?>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <title>User List</title>
-</head>
-<body
-
-

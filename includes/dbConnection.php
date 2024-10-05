@@ -1,5 +1,5 @@
 <?php
-class DbConnection {
+class dbConnection {
     private $connection;
 
     public function __construct() {
