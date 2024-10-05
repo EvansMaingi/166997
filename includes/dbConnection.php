@@ -9,7 +9,7 @@ class MyDbConnection {
     public function __construct() {
         try {
             
-            $dsn = DBTYPE . ":host=" . HOSTNAME . ";port=" . DBPORT . ";dbname=" . DBNAME;
+            $dsn = DBTYPE . ":host=" . HOSTNAME . ";port=" . DBPORT . ";we=" . DBNAME;
             
             $this->conn = new PDO($dsn, HOSTUSER, HOSTPASS);
             
