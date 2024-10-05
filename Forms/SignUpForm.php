@@ -6,6 +6,7 @@ class SignUpForm {
         $this->conn = $dbConn;
     }
 
+    
     public function renderForm() {
         echo '
         <div class="container mt-5">
@@ -54,6 +55,7 @@ class SignUpForm {
         </div>';
     }
 
+    // Handles the form submission and registers the user
     public function handleFormSubmission() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $fullname = $_POST['fullname'];
@@ -64,21 +66,20 @@ class SignUpForm {
             $roleId = $_POST['roleId'];
 
             // Check if the email already exists
-        $stmt = $this->conn->prepare("SELECT COUNT(*) FROM users WHERE email = ?");
-        $stmt->execute([$email]);
-        $emailExists = $stmt->fetchColumn();
+            $stmt = $this->conn->prepare("SELECT COUNT(*) FROM users WHERE email = ?");
+            $stmt->execute([$email]);
+            $emailExists = $stmt->fetchColumn();
 
-        if ($emailExists) {
-            echo "Error: Email already exists. Please use a different email.";
-        } else {
+            if ($emailExists) {
+                echo "<div class='alert alert-danger'>Error: Email already exists. Please use a different email.</div>";
+            } else {
+                // Insert into the database
+                $stmt = $this->conn->prepare("INSERT INTO users (fullname, email, username, password, gender_id, role_id) VALUES (?, ?, ?, ?, ?, ?)");
+                $stmt->execute([$fullname, $email, $username, $password, $genderId, $roleId]);
 
-            // Insert into the database
-            $stmt = $this->conn->prepare("INSERT INTO users (fullname, email, username, password, gender_id, role_id) VALUES (?, ?, ?, ?, ?, ?)");
-            $stmt->execute([$fullname, $email, $username, $password, $genderId, $roleId]);
-
-            echo "User registered successfully!";
+                echo "<div class='alert alert-success'>User registered successfully!</div>";
+            }
         }
     }
-}
 }
 ?>
