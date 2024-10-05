@@ -3,7 +3,7 @@
 require_once __DIR__ . '/../includes/dbConnection.php';  
 require_once __DIR__ . '/../Forms/SignUpForm.php';       
 require_once __DIR__ . '/../includes/constants.php';     
-require_once __DIR__ . '/../Classes/DisplayUsers.php';   
+require_once __DIR__ . '/../Forms/DisplayUsers.php';   
 
 
 $db = new dbConnection(DBTYPE, HOSTNAME, DBPORT, HOSTUSER, HOSTPASS, DBNAME);  

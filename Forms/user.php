@@ -14,7 +14,7 @@ class User {
         $this->fullname = $fullname;
         $this->email = $email;
         $this->username = $username;
-        $this->password = password_hash($password, PASSWORD_DEFAULT); // Hashing password
+        $this->password = password_hash($password, PASSWORD_DEFAULT); 
         $this->genderId = $genderId;
         $this->roleId = $roleId;
 
