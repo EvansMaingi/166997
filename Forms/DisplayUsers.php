@@ -6,6 +6,8 @@ class DisplayUsers {
         $this->conn = $dbConn;
     }
 
+    //display users
+
     public function displayUsersTable() {
         $stmt = $this->conn->prepare("SELECT fullname, email, username, gender_id, role_id FROM users");
         $stmt->execute();
