@@ -1,7 +1,7 @@
 <?php
 
 require "includes/constants.php";
-require "dbConnection.php";
+require "includes/DbConnection.php";
 
 // Autoloader function to load class files dynamically
 function ClassAutoload($ClassName) {
@@ -22,7 +22,7 @@ function ClassAutoload($ClassName) {
 spl_autoload_register('ClassAutoload');
 
 // Database connection class using PDO
-class dbConnection {
+class Dbconnection {
     private $conn;
 
     // Constructor to establish a database connection
