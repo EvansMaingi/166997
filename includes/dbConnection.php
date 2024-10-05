@@ -1,9 +1,9 @@
 <?php
 // Ensure the necessary constants are included
-//require "includes/constants.php";
+require "includes/constants.php";
 
 
-require_once __DIR__ . 'includes/constants.php';
+//require_once __DIR__ . 'includes/constants.php';
 
 
 
