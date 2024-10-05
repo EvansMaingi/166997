@@ -19,8 +19,8 @@ class User {
         $this->roleId = $roleId;
 
         // Establish database connection
-        $db = new dbConnection();
-        $this->connection = $db->getConnection();
+        //$db = new dbConnection();
+       // $this->connection = $db->getConnection();
     }
 
     // Method to save the user data

@@ -1,4 +1,11 @@
 <?php
+
+?>
+
+<link rel="stylesheet" href="css/FormsStyle.css/style.css">
+
+<?php
+
 class SignUpForm {
     private $conn;
 
