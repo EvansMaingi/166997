@@ -1,21 +1,43 @@
 <?php
-class dbConnection {
-    private $connection;
+// Ensure the necessary constants are included
+require "includes/constants.php";
 
+class MyDbConnection {
+    private $conn;
+
+    
     public function __construct() {
-        $dsn = 'mysql:host=127.0.0.1:3307;dbname=ics_e';
-        $username = 'root';
-        $password = 'evoke@123';
         try {
-            $this->connection = new PDO($dsn, $username, $password);
-            $this->connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            
+            $dsn = DBTYPE . ":host=" . HOSTNAME . ";port=" . DBPORT . ";dbname=" . DBNAME;
+            
+            $this->conn = new PDO($dsn, HOSTUSER, HOSTPASS);
+            
+            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
-            echo 'Connection failed: ' . $e->getMessage();
+            // Handle connection errors
+            echo "Connection failed: " . $e->getMessage();
+            exit;
         }
     }
 
+    
     public function getConnection() {
-        return $this->connection;
+        return $this->conn;
+    }
+
+    
+    public function insertData($table, $data) {
+        // Build the query
+        $columns = implode(", ", array_keys($data));
+        $placeholders = ":" . implode(", :", array_keys($data));
+        
+        $sql = "INSERT INTO $table ($columns) VALUES ($placeholders)";
+        
+        
+        $stmt = $this->conn->prepare($sql);
+        
+    
+        $stmt->execute($data);
     }
 }
-?>
