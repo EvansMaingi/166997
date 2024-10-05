@@ -17,6 +17,8 @@ try {
     $mail->SMTPSecure = 'tls';
     $mail->Port = 587;
 
+    //php Mailer
+
     $mail->setFrom('your_email@example.com', 'Mailer');
     $mail->addAddress($email, $username);
 
