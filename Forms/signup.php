@@ -15,10 +15,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $signUpForm->handleFormSubmission();  
 }
 
-// Render the sign-up form (ensure the renderForm method exists in SignUpForm)
+
 $signUpForm->renderForm();
 
-// Display all users in a table
-$displayUsers = new DisplayUsers($conn);  // Create an instance of DisplayUsers and pass the connection
-$displayUsers->displayUsersTable();  // Display users logic (ensure this method exists in DisplayUsers)
+
+$displayUsers = new DisplayUsers($conn);  
+$displayUsers->displayUsersTable();  
 ?>

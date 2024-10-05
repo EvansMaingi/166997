@@ -1,48 +1,28 @@
 <?php
-// Ensure the necessary constants are included
-require "includes/constants.php";
 
-
-//require_once __DIR__ . 'includes/constants.php';
-
-
+require_once __DIR__ . '/constants.php';  
 
 class dbConnection {
     private $conn;
 
     
-    public function __construct() {
+    public function __construct($dbType, $hostName, $dbPort, $hostUser, $hostPass, $dbName) {
         try {
             
-            $dsn = DBTYPE . ":host=" . HOSTNAME . ";port=" . DBPORT . ";we=" . DBNAME;
+            $dsn = "$dbType:host=$hostName;port=$dbPort;dbname=$dbName";
             
-            $this->conn = new PDO($dsn, HOSTUSER, HOSTPASS);
+            $this->conn = new PDO($dsn, $hostUser, $hostPass);
             
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
-            // Handle connection errors
+            
             echo "Connection failed: " . $e->getMessage();
             exit;
         }
     }
 
-    
+    // Method to get the connection for other operations
     public function getConnection() {
         return $this->conn;
-    }
-
-    
-    public function insertData($table, $data) {
-        // Build the query
-        $columns = implode(", ", array_keys($data));
-        $placeholders = ":" . implode(", :", array_keys($data));
-        
-        $sql = "INSERT INTO $table ($columns) VALUES ($placeholders)";
-        
-        
-        $stmt = $this->conn->prepare($sql);
-        
-    
-        $stmt->execute($data);
     }
 }
