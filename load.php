@@ -1,41 +1,42 @@
 <?php
 
-require "includes/constants.php";
+
+require "includes/constants.php"; 
 require "includes/dbConnection.php";
 
-// Autoloader function to load class files dynamically
+
 function ClassAutoload($ClassName) {
     $directories = ["forms", "processes", "structure", "tables", "global", "store"];
 
     foreach ($directories as $dir) {
-        // Create the full path to the file
+        
         $FileName = __DIR__ . DIRECTORY_SEPARATOR . $dir . DIRECTORY_SEPARATOR . $ClassName . '.php';
 
-        // Check if the file exists and is readable, then include it
+        
         if (file_exists($FileName) && is_readable($FileName)) {
             require_once $FileName;
         }
     }
 }
 
-// Register the autoloader
+
 spl_autoload_register('ClassAutoload');
 
-// Rename the DbConnection class to prevent conflict
+// MyDbConnection class for connecting to the database
 class MyDbConnection {
     private $conn;
 
     // Constructor to establish a database connection
-    public function __construct($dbType, $hostName, $dbPort, $hostUser, $hostPass, $dbName) {
+    public function __construct() {
         try {
-            // Build the DSN (Data Source Name) string
-            $dsn = "$dbType:host=$hostName;port=$dbPort;dbname=$dbName";
+            // Fetch constants from the configuration
+            $dsn = DBTYPE . ":host=" . HOSTNAME . ";port=" . DBPORT . ";dbname=" . DBNAME;
             // Create a new PDO instance
-            $this->conn = new PDO($dsn, $hostUser, $hostPass);
-            // Set error mode to exceptions
+            $this->conn = new PDO($dsn, HOSTUSER, HOSTPASS);
+            
             $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
-            // Handle connection errors
+            
             echo "Connection failed: " . $e->getMessage();
             exit;
         }
@@ -46,19 +47,25 @@ class MyDbConnection {
         return $this->conn;
     }
 
-    // Example method to insert data into a table
+    
     public function insertData($table, $data) {
-        // Build the query
-        $columns = implode(", ", array_keys($data));
-        $placeholders = ":" . implode(", :", array_keys($data));
-        
-        $sql = "INSERT INTO $table ($columns) VALUES ($placeholders)";
-        
-        // Prepare the statement
-        $stmt = $this->conn->prepare($sql);
-        
-        // Execute with data array
-        $stmt->execute($data);
+        try {
+            
+            $columns = implode(", ", array_keys($data));
+            $placeholders = ":" . implode(", :", array_keys($data));
+            
+            $sql = "INSERT INTO $table ($columns) VALUES ($placeholders)";
+            
+            
+            $stmt = $this->conn->prepare($sql);
+            
+            
+            $stmt->execute($data);
+            echo "Data inserted successfully!";
+        } catch (PDOException $e) {
+            
+            echo "Error inserting data: " . $e->getMessage();
+        }
     }
 }
 
@@ -68,14 +75,24 @@ $ObjMenus = new menus();
 $ObjContents = new contents();
 
 // Create a new database connection
-$conn = new MyDbConnection(DBTYPE, HOSTNAME, DBPORT, HOSTUSER, HOSTPASS, DBNAME);
+$dbConn = new MyDbConnection(); // No need to pass constants here since it's fetched from constants.php
+$conn = $dbConn->getConnection(); // Get the PDO connection object
 
-// Sample data to insert (replace this with actual data)
+// Sample data to insert (ensure this is sanitized and validated properly)
 $data = [
-    'username' => 'john_doe',
+    'username' => 'john_doe',       
     'email' => 'john@example.com',
-    'password' => 'securepassword'
+    'password' => password_hash('securepassword', PASSWORD_DEFAULT) 
 ];
 
-// Insert the data into 'users' table
-$conn->insertData('users', $data);
+
+$dbConn->insertData('users', $data); 
+
+
+$ObjLayouts->heading();
+$ObjMenus->main_menu();
+$ObjContents->about_content();
+$ObjContents->sidebar();
+$ObjLayouts->footer();
+
+?>
